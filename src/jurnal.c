@@ -17,7 +17,7 @@ static char* trim(char* str) {
 void parse_csv(const char* filename, DoubleLinkedList* list) {
     FILE* file = fopen(filename, "r");
     if (!file) {
-        printf("Error opening file %s\n", filename);
+        printf("Error membuka file %s\n", filename);
         return;
     }
 
