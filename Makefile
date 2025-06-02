@@ -7,7 +7,7 @@ ASSETS_DIR = assets
 
 # Source files
 SOURCES = $(SRC_DIR)/dll.c $(SRC_DIR)/jurnal.c $(SRC_DIR)/main.c $(SRC_DIR)/fitur1.c $(SRC_DIR)/fitur2.c $(SRC_DIR)/fitur3.c $(SRC_DIR)/fitur4.c $(SRC_DIR)/fitur5.c 
-OBJECTS = $(OBJ_DIR)/dll.o $(OBJ_DIR)/jurnal.o $(OBJ_DIR)/main.o $(SRC_DIR)/fitur1.o $(OBJ_DIR)/fitur2.o $(SRC_DIR)/fitur3.o $(SRC_DIR)/fitur4.o $(SRC_DIR)/fitur5.o
+OBJECTS = $(OBJ_DIR)/dll.o $(OBJ_DIR)/jurnal.o $(OBJ_DIR)/main.o $(OBJ_DIR)/fitur1.o $(OBJ_DIR)/fitur2.o $(OBJ_DIR)/fitur3.o $(OBJ_DIR)/fitur4.o $(OBJ_DIR)/fitur5.o
 
 # Executable name
 TARGET = $(BIN_DIR)/journal_app

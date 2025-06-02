@@ -11,7 +11,7 @@ int main() {
     dll_init(&list);
     sll_init(&searchResults);
 
-    parse_csv(".\\assets\\data_tubes_tes.csv", &list);
+    parse_csv(".\\assets\\data_tubes.csv", &list);
 
     int pilihan;
     char keyword[MAX_STR];
