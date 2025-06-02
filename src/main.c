@@ -37,6 +37,7 @@ int main() {
                 fgets(keyword, MAX_STR, stdin);
                 keyword[strcspn(keyword, "\n")] = '\0';
                 fitur1_searchField(&list, keyword); // panggil fungsi dari fitur1.c
+                break;
             case 3:
                 printf("Masukkan nama author yang ingin dicari secara spesifik: ");
                 fgets(keyword, MAX_STR, stdin);
