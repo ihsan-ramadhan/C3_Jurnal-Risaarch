@@ -4,7 +4,7 @@
 #include "dll.h" // Assuming dll.h contains the Journal struct and DoubleLinkedList
 
 #define MAX_STR 256
-#define MAX_RESULTS 50
+#define MAX_RESULTS 10
 
 typedef struct {
     char title[MAX_STR];
