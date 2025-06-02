@@ -5,33 +5,38 @@
 
 #define MAX_QUEUE 10
 
+// Node untuk hasil tampilan (Singly Linked List)
+typedef struct SLLNode_f1 {
+    char title[256];
+    char url[256];
+    struct SLLNode_f1 *next;
+} SLLNode_f1;
+
+// Node Queue
 typedef struct QueueNode {
     Node *data;
     struct QueueNode *next;
 } QueueNode;
 
+// Queue ADT
 typedef struct {
     QueueNode *front, *rear;
     int size;
 } Queue;
 
-typedef struct SLLNode_f1 {
-    char title[MAX_STR];
-    char url[MAX_STR];
-    struct SLLNode_f1 *next;
-} SLLNode_f1;
+// Global navigasi
+extern Node *page;
 
-// Fungsi utama
-void fitur1_searchField(DoubleLinkedList *dll, const char *field);
-
-// Queue
+// Fungsi-fungsi
+int str_casecmp(const char *a, const char *b);
 void queue_init(Queue *q);
 void queue_enqueue(Queue *q, Node *data);
 void queue_clear(Queue *q);
 
-// SLL tampilan
 void sll_buildFromQueue(Queue *q, SLLNode_f1 **head);
 void sll_show(SLLNode_f1 *head);
 void sll_clear(SLLNode_f1 **head);
+
+void fitur1_searchField(DoubleLinkedList *dll, const char *field);
 
 #endif
