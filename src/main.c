@@ -3,10 +3,10 @@
 #include <string.h>
 #include "dll.h"
 #include "jurnal.h"
+#include "fitur2.h"
 #include "fitur3.h"
 #include "fitur4.h"
 #include "fitur1.h"
-
 
 int main() {
     DoubleLinkedList list;
@@ -24,6 +24,7 @@ int main() {
     while (pilihan != 6) {
         printf("\n=== Jurnal Risaarch ===\n");
         printf("1. Cari Jurnal Berdasarkan Field of Study\n");
+        printf("2. Mencari Jurnal Berdasarkan Rentang Tahun\n");
         printf("3. Mencari Jurnal Berdasarkan Author\n");
         printf("4. Mencari Jurnal Berdasarkan Kata Kunci\n");
         printf("6. Exit\n");
@@ -37,6 +38,16 @@ int main() {
                 fgets(keyword, MAX_STR, stdin);
                 keyword[strcspn(keyword, "\n")] = '\0';
                 fitur1_searchField(&list, keyword); // panggil fungsi dari fitur1.c
+            case 2: {
+                int tahunAwal, tahunAkhir;
+                printf("Masukkan tahun awal: ");
+                scanf("%d", &tahunAwal);
+                printf("Masukkan tahun akhir: ");
+                scanf("%d", &tahunAkhir);
+                getchar(); // Clear newline
+                filter_by_year_range(&list, tahunAwal, tahunAkhir);
+                break;
+            }
             case 3:
                 printf("Masukkan nama author yang ingin dicari secara spesifik: ");
                 fgets(keyword, MAX_STR, stdin);
