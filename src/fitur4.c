@@ -43,54 +43,24 @@ void sll_printList(SingleLinkedList* list) {
         return;
     }
 
-    const int title_width = 40;
-    int doi_width = strlen("DOI URL");
-
-    SLLNode* current = list->head;
-    while (current != NULL) {
-        int doi_len = strlen(current->data.doiUrl);
-        if (doi_len > doi_width) doi_width = doi_len;
-        current = current->next;
-    }
-
-    if (doi_width < strlen("DOI URL")) doi_width = strlen("DOI URL");
+    const int label_width = 10;
 
     printf("\nHasil pencarian:\n");
-    printf("%-*s | %-*s\n", title_width, "TITLE", doi_width, "DOI URL");
-
-    char* title_sep = (char*)malloc(title_width + 1);
-    char* doi_sep = (char*)malloc(doi_width + 1);
-    memset(title_sep, '-', title_width);
-    title_sep[title_width] = '\0';
-    memset(doi_sep, '-', doi_width);
-    doi_sep[doi_width] = '\0';
-    printf("%s-+-%s\n", title_sep, doi_sep);
-    free(title_sep);
-    free(doi_sep);
-
-    current = list->head;
+    SLLNode* current = list->head;
+    int row_number = 1;
     while (current != NULL) {
-        char title[title_width + 1];
-        strncpy(title, current->data.title, title_width);
-        title[title_width] = '\0';
-
-        printf("%-*s | %-*s\n", 
-               title_width, title, 
-               doi_width, strlen(current->data.doiUrl) ? current->data.doiUrl : "-");
-
+        printf("%d. %-*s %s\n", 
+               row_number, 
+               label_width, "Title:", 
+               current->data.title);
+        printf("   %-*s %s\n", 
+               label_width, "DOI URL:", 
+               strlen(current->data.doiUrl) ? current->data.doiUrl : "-");
         if (current->next != NULL) {
-            title_sep = (char*)malloc(title_width + 1);
-            doi_sep = (char*)malloc(doi_width + 1);
-            memset(title_sep, '-', title_width);
-            title_sep[title_width] = '\0';
-            memset(doi_sep, '-', doi_width);
-            doi_sep[doi_width] = '\0';
-            printf("%s-+-%s\n", title_sep, doi_sep);
-            free(title_sep);
-            free(doi_sep);
+            printf("\n");
         }
-
         current = current->next;
+        row_number++;
     }
 
     printf("\nTotal jurnal yang sesuai: %d\n", list->size);
@@ -105,6 +75,66 @@ void sll_freeList(SingleLinkedList* list) {
     }
     list->head = NULL;
     list->size = 0;
+}
+
+void queue_init(Queue* queue) {
+    queue->front = NULL;
+    queue->rear = NULL;
+    queue->size = 0;
+}
+
+QueueNode* queue_createNode(SearchResult data) {
+    QueueNode* newNode = (QueueNode*)malloc(sizeof(QueueNode));
+    if (newNode == NULL) {
+        printf("Gagal alokasi memori!\n");
+        return NULL;
+    }
+    strcpy(newNode->data.title, data.title);
+    strcpy(newNode->data.doiUrl, data.doiUrl);
+    newNode->next = NULL;
+    return newNode;
+}
+
+void queue_enqueue(Queue* queue, SearchResult data) {
+    QueueNode* newNode = queue_createNode(data);
+    if (newNode == NULL) return;
+
+    if (queue->rear == NULL) {
+        queue->front = newNode;
+        queue->rear = newNode;
+    } else {
+        queue->rear->next = newNode;
+        queue->rear = newNode;
+    }
+    queue->size++;
+}
+
+SearchResult queue_dequeue(Queue* queue) {
+    SearchResult empty = {"", ""};
+    if (queue->front == NULL) return empty;
+
+    QueueNode* temp = queue->front;
+    SearchResult data = temp->data;
+    queue->front = queue->front->next;
+    if (queue->front == NULL) {
+        queue->rear = NULL;
+    }
+    free(temp);
+    queue->size--;
+    return data;
+}
+
+int queue_isEmpty(Queue* queue) {
+    return queue->front == NULL;
+}
+
+void queue_free(Queue* queue) {
+    while (!queue_isEmpty(queue)) {
+        queue_dequeue(queue);
+    }
+    queue->front = NULL;
+    queue->rear = NULL;
+    queue->size = 0;
 }
 
 static int stristr(const char* str, const char* substr) {
@@ -143,6 +173,8 @@ void search_journals(DoubleLinkedList* sourceList, SingleLinkedList* resultList,
     if (!sourceList || !resultList || !keyword) return;
 
     sll_init(resultList);
+    Queue queue;
+    queue_init(&queue);
 
     Node* current = sourceList->head;
     while (current != NULL) {
@@ -152,8 +184,15 @@ void search_journals(DoubleLinkedList* sourceList, SingleLinkedList* resultList,
             result.title[MAX_STR - 1] = '\0';
             strncpy(result.doiUrl, current->data.doiUrl, MAX_STR - 1);
             result.doiUrl[MAX_STR - 1] = '\0';
-            sll_insertLast(resultList, result);
+            queue_enqueue(&queue, result);
         }
         current = current->next;
     }
+
+    while (!queue_isEmpty(&queue)) {
+        SearchResult result = queue_dequeue(&queue);
+        sll_insertLast(resultList, result);
+    }
+
+    queue_free(&queue);
 }
