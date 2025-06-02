@@ -77,14 +77,14 @@ void sll_freeList(SingleLinkedList* list) {
     list->size = 0;
 }
 
-void queue_init(Queue* queue) {
+void queue_init4(Queue4* queue) {
     queue->front = NULL;
     queue->rear = NULL;
     queue->size = 0;
 }
 
-QueueNode* queue_createNode(SearchResult data) {
-    QueueNode* newNode = (QueueNode*)malloc(sizeof(QueueNode));
+QueueNode4* queue_createNode4(SearchResult data) {
+    QueueNode4* newNode = (QueueNode4*)malloc(sizeof(QueueNode4));
     if (newNode == NULL) {
         printf("Gagal alokasi memori!\n");
         return NULL;
@@ -95,8 +95,8 @@ QueueNode* queue_createNode(SearchResult data) {
     return newNode;
 }
 
-void queue_enqueue(Queue* queue, SearchResult data) {
-    QueueNode* newNode = queue_createNode(data);
+void queue_enqueue4(Queue4* queue, SearchResult data) {
+    QueueNode4* newNode = queue_createNode4(data);
     if (newNode == NULL) return;
 
     if (queue->rear == NULL) {
@@ -109,11 +109,11 @@ void queue_enqueue(Queue* queue, SearchResult data) {
     queue->size++;
 }
 
-SearchResult queue_dequeue(Queue* queue) {
+SearchResult queue_dequeue4(Queue4* queue) {
     SearchResult empty = {"", ""};
     if (queue->front == NULL) return empty;
 
-    QueueNode* temp = queue->front;
+    QueueNode4* temp = queue->front;
     SearchResult data = temp->data;
     queue->front = queue->front->next;
     if (queue->front == NULL) {
@@ -124,13 +124,13 @@ SearchResult queue_dequeue(Queue* queue) {
     return data;
 }
 
-int queue_isEmpty(Queue* queue) {
+int queue_isEmpty4(Queue4* queue) {
     return queue->front == NULL;
 }
 
-void queue_free(Queue* queue) {
-    while (!queue_isEmpty(queue)) {
-        queue_dequeue(queue);
+void queue_free4(Queue4* queue) {
+    while (!queue_isEmpty4(queue)) {
+        queue_dequeue4(queue);
     }
     queue->front = NULL;
     queue->rear = NULL;
@@ -173,8 +173,8 @@ void search_journals(DoubleLinkedList* sourceList, SingleLinkedList* resultList,
     if (!sourceList || !resultList || !keyword) return;
 
     sll_init(resultList);
-    Queue queue;
-    queue_init(&queue);
+    Queue4 queue;
+    queue_init4(&queue);
 
     Node* current = sourceList->head;
     while (current != NULL) {
@@ -184,15 +184,15 @@ void search_journals(DoubleLinkedList* sourceList, SingleLinkedList* resultList,
             result.title[MAX_STR - 1] = '\0';
             strncpy(result.doiUrl, current->data.doiUrl, MAX_STR - 1);
             result.doiUrl[MAX_STR - 1] = '\0';
-            queue_enqueue(&queue, result);
+            queue_enqueue4(&queue, result);
         }
         current = current->next;
     }
 
-    while (!queue_isEmpty(&queue)) {
-        SearchResult result = queue_dequeue(&queue);
+    while (!queue_isEmpty4(&queue)) {
+        SearchResult result = queue_dequeue4(&queue);
         sll_insertLast(resultList, result);
     }
 
-    queue_free(&queue);
+    queue_free4(&queue);
 }
