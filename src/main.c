@@ -4,6 +4,7 @@
 #include "dll.h"
 #include "jurnal.h"
 #include "fitur4.h"
+#include "fitur1.h"
 
 int main() {
     DoubleLinkedList list;
@@ -18,6 +19,7 @@ int main() {
 
     while (pilihan != 6) {
         printf("\n=== Jurnal Risaarch ===\n");
+        printf("1. Cari Jurnal Berdasarkan Field of Study\n");
         printf("4. Mencari Jurnal Berdasarkan Kata Kunci\n");
         printf("6. Exit\n");
         printf("Masukkan pilihanmu: ");
@@ -25,6 +27,12 @@ int main() {
         getchar();
 
         switch (pilihan) {
+            case 1:
+                printf("Masukkan Field of Study: ");
+                fgets(keyword, MAX_STR, stdin);
+                keyword[strcspn(keyword, "\n")] = '\0';
+                fitur1_searchField(&list, keyword); // panggil fungsi dari fitur1.c
+                break;
             case 4:
                 printf("Masukkan kata kunci yang ingin dicari di Title: ");
                 fgets(keyword, MAX_STR, stdin);
