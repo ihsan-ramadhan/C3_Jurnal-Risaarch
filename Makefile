@@ -6,14 +6,14 @@ BIN_DIR = bin
 ASSETS_DIR = assets
 
 # Source files
-SOURCES = $(SRC_DIR)/dll.c $(SRC_DIR)/jurnal.c $(SRC_DIR)/main.c $(SRC_DIR)/fitur1.c $(SRC_DIR)/fitur2.c $(SRC_DIR)/fitur3.c $(SRC_DIR)/fitur4.c $(SRC_DIR)/fitur5.c 
+SOURCES = $(SRC_DIR)/dll.c $(SRC_DIR)/jurnal.c $(SRC_DIR)/main.c $(SRC_DIR)/fitur1.c $(SRC_DIR)/fitur2.c $(SRC_DIR)/fitur3.c $(SRC_DIR)/fitur4.c $(SRC_DIR)/fitur5.c
 OBJECTS = $(OBJ_DIR)/dll.o $(OBJ_DIR)/jurnal.o $(OBJ_DIR)/main.o $(OBJ_DIR)/fitur1.o $(OBJ_DIR)/fitur2.o $(OBJ_DIR)/fitur3.o $(OBJ_DIR)/fitur4.o $(OBJ_DIR)/fitur5.o
 
 # Executable name
 TARGET = $(BIN_DIR)/journal_app
 
-# Default target
-all: $(TARGET)
+# Default target - will build and then run
+all: run # Mengubah default target menjadi 'run'
 
 # Create directories if they don't exist
 $(shell mkdir -p $(OBJ_DIR) $(BIN_DIR))
@@ -26,9 +26,14 @@ $(TARGET): $(OBJECTS)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# Target untuk menjalankan program
+run: $(TARGET)
+	@echo "Running $(TARGET)..."
+	./$(TARGET) # Menjalankan program setelah berhasil dibuat
+
 # Clean up
 clean:
 	rm -rf $(OBJ_DIR)/*.o $(TARGET)
 
 # Phony targets
-.PHONY: all clean
+.PHONY: all clean run # Tambahkan 'run' ke phony targets

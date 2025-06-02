@@ -50,69 +50,36 @@ void sll3_insertLast(SingleLinkedList3* list, SearchResult3 data) {
 
 // Prints the contents of the SingleLinkedList3
 void sll3_printList(SingleLinkedList3* list) {
-    if (list->head == NULL) {
+    if (!list->head) {
         printf("Author tidak ditemukan.\n");
         return;
     }
 
     const int title_width = 40;
-    const int doi_width = 30; // Increased DOI width
-    const int authors_width = 30; // Added authors width
+    const int doi_width = 45;
+    const int authors_width = 40;
+    const int total_width = title_width + doi_width + authors_width + 6;
 
-    printf("\nHasil pencarian (maksimal %d):\n", MAX_RESULTS);
     printf("%-*s | %-*s | %-*s\n", title_width, "TITLE", doi_width, "DOI URL", authors_width, "AUTHORS");
-
-    char* title_sep = (char*)malloc(title_width + 1);
-    char* doi_sep = (char*)malloc(doi_width + 1);
-    char* authors_sep = (char*)malloc(authors_width + 1);
-    
-    memset(title_sep, '-', title_width);
-    title_sep[title_width] = '\0';
-    memset(doi_sep, '-', doi_width);
-    doi_sep[doi_width] = '\0';
-    memset(authors_sep, '-', authors_width);
-    authors_sep[authors_width] = '\0';
-    printf("%s-+-%s-+-%s\n", title_sep, doi_sep, authors_sep);
-    free(title_sep);
-    free(doi_sep);
-    free(authors_sep);
+    for (int i = 0; i < total_width; i++) printf("-");
+    printf("\n");
 
     SLLNode3* current = list->head;
-    while (current != NULL) {
-        char title[title_width + 1];
-        strncpy(title, current->data.title, title_width);
-        title[title_width] = '\0';
-
-        char authors[authors_width + 1];
-        strncpy(authors, current->data.authors, authors_width);
-        authors[authors_width] = '\0';
-
-        printf("%-*s | %-*s | %-*s\n", 
-               title_width, title, 
-               doi_width, strlen(current->data.doiUrl) ? current->data.doiUrl : "-",
-               authors_width, authors);
-
-        if (current->next != NULL) {
-            title_sep = (char*)malloc(title_width + 1);
-            doi_sep = (char*)malloc(doi_width + 1);
-            authors_sep = (char*)malloc(authors_width + 1);
-            
-            memset(title_sep, '-', title_width);
-            title_sep[title_width] = '\0';
-            memset(doi_sep, '-', doi_width);
-            doi_sep[doi_width] = '\0';
-            memset(authors_sep, '-', authors_width);
-            authors_sep[authors_width] = '\0';
-            printf("%s-+-%s-+-%s\n", title_sep, doi_sep, authors_sep);
-            free(title_sep);
-            free(doi_sep);
-            free(authors_sep);
-        }
+    while (current) {
+        printf("%-*.*s | %-*.*s | %-*.*s\n",
+               title_width, title_width, current->data.title,
+               doi_width, doi_width, strlen(current->data.doiUrl) ? current->data.doiUrl : "-",
+               authors_width, authors_width, current->data.authors);
 
         current = current->next;
+        if (current) {
+            for (int i = 0; i < total_width; i++) printf("-");
+            printf("\n");
+        }
     }
 
     printf("\nTotal jurnal yang ditampilkan: %d\n", list->size);
+
 }
 
 // Frees all nodes in the SingleLinkedList3

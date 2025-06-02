@@ -11,10 +11,9 @@
 int main() {
     DoubleLinkedList list;
     SingleLinkedList searchResults;
-    SingleLinkedList3 searchResults3;
     dll_init(&list);
     sll_init(&searchResults);
-    sll3_init(&searchResults3);
+    
 
     parse_csv(".\\assets\\data_tubes.csv", &list);
 
@@ -50,6 +49,8 @@ int main() {
                 break;
             }
             case 3:
+                SingleLinkedList3 searchResults3;
+                sll3_init(&searchResults3);
                 printf("Masukkan nama author yang ingin dicari secara spesifik: ");
                 fgets(keyword, MAX_STR, stdin);
                 keyword[strcspn(keyword, "\n")] = '\0';
