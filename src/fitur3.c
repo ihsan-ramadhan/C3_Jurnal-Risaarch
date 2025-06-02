@@ -29,7 +29,7 @@ SLLNode3* sll3_createNode(SearchResult3 data) {
 
 // Inserts a new node at the end of the SingleLinkedList3
 void sll3_insertLast(SingleLinkedList3* list, SearchResult3 data) {
-    if (list->size >= MAX_RESULTS) { // Limit to 10 results
+    if (list->size >= MAX_RESULTS) { 
         return;
     }
 
@@ -112,7 +112,7 @@ void sll3_printList(SingleLinkedList3* list) {
         current = current->next;
     }
 
-    printf("\nTotal jurnal yang sesuai: %d\n", list->size);
+    printf("\nTotal jurnal yang ditampilkan: %d\n", list->size);
 }
 
 // Frees all nodes in the SingleLinkedList3
