@@ -51,7 +51,7 @@ void sll3_insertLast(SingleLinkedList3* list, SearchResult3 data) {
 // Prints the contents of the SingleLinkedList3
 void sll3_printList(SingleLinkedList3* list) {
     if (list->head == NULL) {
-        printf("Tidak ada jurnal yang sesuai.\n");
+        printf("Author tidak ditemukan.\n");
         return;
     }
 
