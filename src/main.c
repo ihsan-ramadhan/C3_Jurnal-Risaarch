@@ -3,7 +3,7 @@
 #include <string.h>
 #include "dll.h"
 #include "jurnal.h"
-#include "fitur1.h"
+#include "fitur4.h"
 
 int main() {
     DoubleLinkedList list;
@@ -16,16 +16,16 @@ int main() {
     int pilihan;
     char keyword[MAX_STR];
 
-    while (pilihan != 2) {
+    while (pilihan != 6) {
         printf("\n=== Jurnal Risaarch ===\n");
-        printf("1. Mencari Jurnal Berdasarkan Kata Kunci\n");
-        printf("2. Exit\n");
+        printf("4. Mencari Jurnal Berdasarkan Kata Kunci\n");
+        printf("6. Exit\n");
         printf("Masukkan pilihanmu: ");
         scanf("%d", &pilihan);
         getchar();
 
         switch (pilihan) {
-            case 1:
+            case 4:
                 printf("Masukkan kata kunci yang ingin dicari di Title: ");
                 fgets(keyword, MAX_STR, stdin);
                 keyword[strcspn(keyword, "\n")] = '\0';
@@ -33,7 +33,7 @@ int main() {
                 sll_printList(&searchResults);
                 sll_freeList(&searchResults);
                 break;
-            case 2:
+            case 6:
                 printf("Keluar dari program...\n");
                 break;
             default:

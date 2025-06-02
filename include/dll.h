@@ -26,7 +26,6 @@ typedef struct {
 void dll_init(DoubleLinkedList* list);
 Node* dll_createNode(Journal data);
 void dll_insertLast(DoubleLinkedList* list, Journal data);
-void dll_printList(DoubleLinkedList* list);
 void dll_freeList(DoubleLinkedList* list);
 
 #endif
