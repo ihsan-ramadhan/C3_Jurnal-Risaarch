@@ -18,16 +18,16 @@ int str_casecmp(const char *a, const char *b) {
 }
 
 // Queue
-void queue_init(Queue *q) {
+void queue_init(Queue_f1 *q) {
     q->front = q->rear = NULL;
     q->size = 0;
 }
 
-void queue_enqueue(Queue *q, Node *data) {
+void queue_enqueue(Queue_f1 *q, Node *data) {
     if (q->size >= MAX_QUEUE)
         return;
 
-    QueueNode *newNode = (QueueNode *)malloc(sizeof(QueueNode));
+    QueueNode_f1 *newNode = (QueueNode_f1 *)malloc(sizeof(QueueNode_f1));
     newNode->data = data;
     newNode->next = NULL;
 
@@ -41,9 +41,9 @@ void queue_enqueue(Queue *q, Node *data) {
     q->size++;
 }
 
-void queue_clear(Queue *q) {
+void queue_clear(Queue_f1 *q) {
     while (q->front) {
-        QueueNode *temp = q->front;
+        QueueNode_f1 *temp = q->front;
         q->front = q->front->next;
         free(temp);
     }
@@ -52,11 +52,11 @@ void queue_clear(Queue *q) {
 }
 
 // SLL untuk tampilan hasil
-void sll_buildFromQueue(Queue *q, SLLNode_f1 **head) {
+void sll_buildFromQueue(Queue_f1 *q, SLLNode_f1 **head) {
     *head = NULL;
     SLLNode_f1 *tail = NULL;
 
-    QueueNode *curr = q->front;
+    QueueNode_f1 *curr = q->front;
     while (curr) {
         SLLNode_f1 *newNode = (SLLNode_f1 *)malloc(sizeof(SLLNode_f1));
         strcpy(newNode->title, curr->data->data.title);
@@ -95,7 +95,7 @@ void fitur1_searchField(DoubleLinkedList *dll, const char *field) {
     page = dll->head;
 
     while (1) {
-        Queue q;
+        Queue_f1 q;
         queue_init(&q);
         Node *curr = page;
         int found = 0;

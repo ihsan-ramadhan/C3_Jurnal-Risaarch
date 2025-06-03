@@ -16,24 +16,24 @@ typedef struct SLLNode_f1 {
 typedef struct QueueNode {
     Node *data;
     struct QueueNode *next;
-} QueueNode;
+} QueueNode_f1;
 
 // Queue ADT
 typedef struct {
-    QueueNode *front, *rear;
+    QueueNode_f1 *front, *rear;
     int size;
-} Queue;
+} Queue_f1;
 
 // Global navigasi
 extern Node *page;
 
 // Fungsi-fungsi
 int str_casecmp(const char *a, const char *b);
-void queue_init(Queue *q);
-void queue_enqueue(Queue *q, Node *data);
-void queue_clear(Queue *q);
+void queue_init(Queue_f1 *q);
+void queue_enqueue(Queue_f1 *q, Node *data);
+void queue_clear(Queue_f1 *q);
 
-void sll_buildFromQueue(Queue *q, SLLNode_f1 **head);
+void sll_buildFromQueue(Queue_f1 *q, SLLNode_f1 **head);
 void sll_show(SLLNode_f1 *head);
 void sll_clear(SLLNode_f1 **head);
 
