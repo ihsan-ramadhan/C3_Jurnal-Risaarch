@@ -38,5 +38,7 @@ void sll_show(SLLNode_f1 *head);
 void sll_clear(SLLNode_f1 **head);
 
 void fitur1_searchField(DoubleLinkedList *dll, const char *field);
+void tampilkanFieldStatic2Kolom();
+
 
 #endif

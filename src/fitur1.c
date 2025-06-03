@@ -143,3 +143,32 @@ void fitur1_searchField(DoubleLinkedList *dll, const char *field) {
         queue_clear(&q);
     }
 }
+
+void tampilkanFieldStatic2Kolom() {
+    const char *fields[] = {
+        "Art", "Biology", "Business", "Chemistry", "Computer Science",
+        "Economics", "Engineering", "Environmental Science", "Geography", "Geology",
+        "History", "Materials Science", "Mathematics", "Medicine", "Philosophy",
+        "Physics", "Political Science", "Psychology", "Sociology"
+    };
+    int jumlahField = sizeof(fields) / sizeof(fields[0]);
+    int tengah = (jumlahField + 1) / 2;
+
+    printf("\n================== List Field of Study ==================\n");
+    printf("| No | Field of Study         || No | Field of Study         |\n");
+    printf("-----------------------------------------------------------\n");
+
+    for (int i = 0; i < tengah; i++) {
+        int kananIndex = i + tengah;
+
+        printf("| %-2d | %-22s", i + 1, fields[i]);
+
+        if (kananIndex < jumlahField) {
+            printf("|| %-2d | %-22s |\n", kananIndex + 1, fields[kananIndex]);
+        } else {
+            printf("||     |                          |\n");
+        }
+    }
+
+    printf("===========================================================\n");
+}
