@@ -1,22 +1,27 @@
+/*
+ * File        : fitur3.c
+ * Deskripsi   : Modul untuk pencarian jurnal berdasarkan nama penulis dan pengelolaan daftar hasil pencarian.
+ *               Menyediakan fungsi untuk inisialisasi linked list, pembuatan node, penyisipan data,
+ *               pencetakan hasil pencarian dalam format tabel, pembersihan linked list, dan pencarian
+ *               jurnal berdasarkan kata kunci penulis dengan batasan jumlah hasil maksimum.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include "fitur3.h"
 
-// Initializes a SingleLinkedList3
-void sll3_init(SingleLinkedList3 *list)
-{
+// Inisialisasi single linked list untuk menyimpan hasil pencarian berdasarkan penulis
+void sll3_init(SingleLinkedList3 *list) {
     list->head = NULL;
     list->size = 0;
 }
 
-// Creates a new SLLNode3 with the given data
-SLLNode3 *sll3_createNode(SearchResult3 data)
-{
+// Membuat node baru untuk single linked list dengan data hasil pencarian
+SLLNode3 *sll3_createNode(SearchResult3 data) {
     SLLNode3 *newNode = (SLLNode3 *)malloc(sizeof(SLLNode3));
-    if (newNode == NULL)
-    {
+    if (newNode == NULL) {
         printf("Gagal alokasi memori untuk SLLNode3!\n");
         return NULL;
     }
@@ -30,27 +35,20 @@ SLLNode3 *sll3_createNode(SearchResult3 data)
     return newNode;
 }
 
-// Inserts a new node at the end of the SingleLinkedList3
-void sll3_insertLast(SingleLinkedList3 *list, SearchResult3 data)
-{
-    if (list->size >= MAX_RESULTS)
-    {
+// Menyisipkan data hasil pencarian di akhir single linked list dengan batasan jumlah maksimum
+void sll3_insertLast(SingleLinkedList3 *list, SearchResult3 data) {
+    if (list->size >= MAX_RESULTS) {
         return;
     }
 
     SLLNode3 *newNode = sll3_createNode(data);
-    if (newNode == NULL)
-        return;
+    if (newNode == NULL) return;
 
-    if (list->head == NULL)
-    {
+    if (list->head == NULL) {
         list->head = newNode;
-    }
-    else
-    {
+    } else {
         SLLNode3 *current = list->head;
-        while (current->next != NULL)
-        {
+        while (current->next != NULL) {
             current = current->next;
         }
         current->next = newNode;
@@ -58,11 +56,9 @@ void sll3_insertLast(SingleLinkedList3 *list, SearchResult3 data)
     list->size++;
 }
 
-// Prints the contents of the SingleLinkedList3
-void sll3_printList(SingleLinkedList3 *list)
-{
-    if (!list->head)
-    {
+// Mencetak isi single linked list dalam format tabel
+void sll3_printList(SingleLinkedList3 *list) {
+    if (!list->head) {
         printf("Author tidak ditemukan.\n");
         return;
     }
@@ -79,14 +75,12 @@ void sll3_printList(SingleLinkedList3 *list)
            doi_width, "DOI URL",
            authors_width, "AUTHORS");
 
-    for (int i = 0; i < total_width; i++)
-        printf("-");
+    for (int i = 0; i < total_width; i++) printf("-");
     printf("\n");
 
     SLLNode3 *current = list->head;
     int index = 1;
-    while (current)
-    {
+    while (current) {
         printf("%-*d | %-*.*s | %-*.*s | %-*.*s\n",
                no_width, index,
                title_width, title_width, current->data.title,
@@ -95,10 +89,8 @@ void sll3_printList(SingleLinkedList3 *list)
 
         current = current->next;
         index++;
-        if (current)
-        {
-            for (int i = 0; i < total_width; i++)
-                printf("-");
+        if (current) {
+            for (int i = 0; i < total_width; i++) printf("-");
             printf("\n");
         }
     }
@@ -106,12 +98,10 @@ void sll3_printList(SingleLinkedList3 *list)
     printf("\nTotal jurnal yang ditampilkan: %d\n", list->size);
 }
 
-// Frees all nodes in the SingleLinkedList3
-void sll3_freeList(SingleLinkedList3 *list)
-{
+// Membebaskan memori yang digunakan oleh single linked list
+void sll3_freeList(SingleLinkedList3 *list) {
     SLLNode3 *current = list->head;
-    while (current != NULL)
-    {
+    while (current != NULL) {
         SLLNode3 *temp = current;
         current = current->next;
         free(temp);
@@ -120,34 +110,28 @@ void sll3_freeList(SingleLinkedList3 *list)
     list->size = 0;
 }
 
-// Case-insensitive substring search
-static int stristr_custom(const char *str, const char *substr)
-{
-    if (!str || !substr)
-        return 0;
+// Mencari substring secara case-insensitive dalam string
+static int stristr_custom(const char *str, const char *substr) {
+    if (!str || !substr) return 0;
 
     int len_str = strlen(str);
     int len_substr = strlen(substr);
-    if (len_substr > len_str)
-        return 0;
+    if (len_substr > len_str) return 0;
 
     char *lower_str = (char *)malloc(len_str + 1);
     char *lower_substr = (char *)malloc(len_substr + 1);
-    if (!lower_str || !lower_substr)
-    {
+    if (!lower_str || !lower_substr) {
         free(lower_str);
         free(lower_substr);
         return 0;
     }
 
-    for (int i = 0; i < len_str; i++)
-    {
+    for (int i = 0; i < len_str; i++) {
         lower_str[i] = tolower(str[i]);
     }
     lower_str[len_str] = '\0';
 
-    for (int i = 0; i < len_substr; i++)
-    {
+    for (int i = 0; i < len_substr; i++) {
         lower_substr[i] = tolower(substr[i]);
     }
     lower_substr[len_substr] = '\0';
@@ -159,19 +143,15 @@ static int stristr_custom(const char *str, const char *substr)
     return result;
 }
 
-// Searches for journals by author keyword and populates the result list (up to MAX_RESULTS)
-void search_journals_by_author(DoubleLinkedList *sourceList, SingleLinkedList3 *resultList, const char *authorKeyword)
-{
-    if (!sourceList || !resultList || !authorKeyword)
-        return;
+// Mencari jurnal berdasarkan kata kunci penulis dan menyimpan hasilnya dalam single linked list
+void search_journals_by_author(DoubleLinkedList *sourceList, SingleLinkedList3 *resultList, const char *authorKeyword) {
+    if (!sourceList || !resultList || !authorKeyword) return;
 
-    sll3_init(resultList); // Initialize the result list
+    sll3_init(resultList); // Inisialisasi daftar hasil
 
     Node *current = sourceList->head;
-    while (current != NULL && resultList->size < MAX_RESULTS)
-    {
-        if (stristr_custom(current->data.authors, authorKeyword))
-        {
+    while (current != NULL && resultList->size < MAX_RESULTS) {
+        if (stristr_custom(current->data.authors, authorKeyword)) {
             SearchResult3 result;
             strncpy(result.title, current->data.title, MAX_STR - 1);
             result.title[MAX_STR - 1] = '\0';

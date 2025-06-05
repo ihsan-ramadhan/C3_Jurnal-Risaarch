@@ -1,14 +1,23 @@
+/*
+ * File        : dll.c
+ * Deskripsi   : Modul untuk pengelolaan double linked list yang menyimpan keseluruhan data jurnal.
+ *               Menyediakan fungsi untuk inisialisasi double linked list, pembuatan node baru,
+ *               penyisipan data di akhir list, dan pembersihan seluruh list.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "dll.h"
 
+// Inisialisasi double linked list untuk menyimpan data jurnal
 void dll_init(DoubleLinkedList* list) {
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
 }
 
+// Membuat node baru untuk double linked list dengan data jurnal
 Node* dll_createNode(Journal data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     if (newNode == NULL) {
@@ -25,6 +34,7 @@ Node* dll_createNode(Journal data) {
     return newNode;
 }
 
+// Menyisipkan data jurnal di akhir double linked list
 void dll_insertLast(DoubleLinkedList* list, Journal data) {
     Node* newNode = dll_createNode(data);
     if (newNode == NULL) return;
@@ -40,6 +50,7 @@ void dll_insertLast(DoubleLinkedList* list, Journal data) {
     list->size++;
 }
 
+// Membebaskan memori yang digunakan oleh double linked list
 void dll_freeList(DoubleLinkedList* list) {
     Node* current = list->head;
     while (current != NULL) {

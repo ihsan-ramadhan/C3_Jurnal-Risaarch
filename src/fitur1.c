@@ -1,3 +1,12 @@
+/*
+ * File        : fitur1.c
+ * Deskripsi   : Modul untuk pencarian jurnal berdasarkan Field of Study dengan paginasi.
+ *               Menyediakan fungsi untuk perbandingan string tanpa case-sensitive, membangun
+ *               single linked list dari antrian hasil pencarian, menampilkan hasil pencarian,
+ *               membersihkan single linked list, mencari jurnal berdasarkan Field of Study
+ *               dengan navigasi halaman, dan menampilkan daftar Field of Study dalam format tabel dua kolom.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +15,7 @@
 
 Node *page = NULL; // Global pointer untuk navigasi
 
-// Fungsi bantu: Perbandingan string tanpa case-sensitive
+// Membandingkan dua string tanpa memperhatikan case-sensitive
 int str_casecmp(const char *a, const char *b) {
     while (*a && *b) {
         if (tolower(*a) != tolower(*b))
@@ -17,50 +26,16 @@ int str_casecmp(const char *a, const char *b) {
     return *a - *b;
 }
 
-// Queue
-void queue_init(Queue_f1 *q) {
-    q->front = q->rear = NULL;
-    q->size = 0;
-}
-
-void queue_enqueue(Queue_f1 *q, Node *data) {
-    if (q->size >= MAX_QUEUE)
-        return;
-
-    QueueNode_f1 *newNode = (QueueNode_f1 *)malloc(sizeof(QueueNode_f1));
-    newNode->data = data;
-    newNode->next = NULL;
-
-    if (!q->front) {
-        q->front = q->rear = newNode;
-    } else {
-        q->rear->next = newNode;
-        q->rear = newNode;
-    }
-
-    q->size++;
-}
-
-void queue_clear(Queue_f1 *q) {
-    while (q->front) {
-        QueueNode_f1 *temp = q->front;
-        q->front = q->front->next;
-        free(temp);
-    }
-    q->rear = NULL;
-    q->size = 0;
-}
-
-// SLL untuk tampilan hasil
-void sll_buildFromQueue(Queue_f1 *q, SLLNode_f1 **head) {
+// Membangun single linked list dari antrian hasil pencarian
+void sll_buildFromQueue(Queue *q, SLLNode_f1 **head) {
     *head = NULL;
     SLLNode_f1 *tail = NULL;
 
-    QueueNode_f1 *curr = q->front;
-    while (curr) {
+    while (!queue_isEmpty(q)) {
+        Node *curr = (Node *)queue_dequeue(q);
         SLLNode_f1 *newNode = (SLLNode_f1 *)malloc(sizeof(SLLNode_f1));
-        strcpy(newNode->title, curr->data->data.title);
-        strcpy(newNode->url, curr->data->data.doiUrl);
+        strcpy(newNode->title, curr->data.title);
+        strcpy(newNode->url, curr->data.doiUrl);
         newNode->next = NULL;
 
         if (!*head) {
@@ -69,11 +44,10 @@ void sll_buildFromQueue(Queue_f1 *q, SLLNode_f1 **head) {
             tail->next = newNode;
             tail = newNode;
         }
-
-        curr = curr->next;
     }
 }
 
+// Menampilkan isi single linked list hasil pencarian
 void sll_show(SLLNode_f1 *head) {
     int i = 1;
     while (head) {
@@ -82,6 +56,7 @@ void sll_show(SLLNode_f1 *head) {
     }
 }
 
+// Membebaskan memori yang digunakan oleh single linked list
 void sll_clear(SLLNode_f1 **head) {
     while (*head) {
         SLLNode_f1 *temp = *head;
@@ -90,17 +65,17 @@ void sll_clear(SLLNode_f1 **head) {
     }
 }
 
-// Fitur 1 Utama: Cari berdasarkan Field of Study (tanpa prev)
+// Mencari jurnal berdasarkan Field of Study dengan navigasi halaman (hanya next dan quit)
 void fitur1_searchField(DoubleLinkedList *dll, const char *field) {
     page = dll->head;
 
     while (1) {
-        Queue_f1 q;
+        Queue q;
         queue_init(&q);
         Node *curr = page;
         int found = 0;
 
-        // Masukkan max 10 data yang cocok
+        // Mengumpulkan hingga maksimum 10 data yang sesuai
         while (curr && q.size < MAX_QUEUE) {
             if (str_casecmp(curr->data.fieldOfStudy, field) == 0) {
                 queue_enqueue(&q, curr);
@@ -112,16 +87,17 @@ void fitur1_searchField(DoubleLinkedList *dll, const char *field) {
 
         if (q.size == 0) {
             printf("Tidak ditemukan jurnal dengan Field of Study: %s\n", field);
+            queue_free(&q);
             return;
         }
 
-        // Tampilkan hasil
+        // Menampilkan hasil pencarian
         SLLNode_f1 *result = NULL;
         sll_buildFromQueue(&q, &result);
         sll_show(result);
         sll_clear(&result);
 
-        // Navigasi
+        // Navigasi halaman
         char nav;
         printf("\n[n] Next | [q] Quit: ");
         scanf(" %c", &nav);
@@ -134,16 +110,17 @@ void fitur1_searchField(DoubleLinkedList *dll, const char *field) {
             }
             if (!page) {
                 printf("Sudah di akhir data.\n");
+                queue_free(&q);
                 break;
             }
         } else {
+            queue_free(&q);
             break;
         }
-
-        queue_clear(&q);
     }
 }
 
+// Menampilkan daftar Field of Study dalam format tabel dua kolom
 void tampilkanFieldStatic2Kolom() {
     const char *fields[] = {
         "Art", "Biology", "Business", "Chemistry", "Computer Science",

@@ -1,48 +1,44 @@
+/*
+ * File        : fitur4.h
+ * Deskripsi   : Header file untuk modul pencarian jurnal berdasarkan kata kunci.
+ *               Mendefinisikan struktur data untuk hasil pencarian, single linked list,
+ *               serta deklarasi fungsi untuk inisialisasi, pembuatan node, penyisipan data,
+ *               pencetakan hasil, pembersihan single linked list, dan pencarian jurnal
+ *               berdasarkan kata kunci pada judul.
+ */
+
 #ifndef FITUR4_H
 #define FITUR4_H
 
 #include "dll.h"
+#include "queue.h"
 
 #define MAX_STR 256
 
+// Struktur data untuk menyimpan hasil pencarian jurnal
 typedef struct {
     char title[MAX_STR];
     char doiUrl[MAX_STR];
 } SearchResult;
 
+// Struktur node untuk single linked list hasil pencarian
 typedef struct SLLNode {
     SearchResult data;
     struct SLLNode* next;
 } SLLNode;
 
+// Struktur single linked list untuk hasil pencarian
 typedef struct {
     SLLNode* head;
     int size;
 } SingleLinkedList;
 
-typedef struct QueueNode4 {
-    SearchResult data;
-    struct QueueNode4* next;
-} QueueNode4;
-
-typedef struct {
-    QueueNode4* front;
-    QueueNode4* rear;
-    int size;
-} Queue4;
-
-void sll_init(SingleLinkedList* list);
-SLLNode* sll_createNode(SearchResult data);
-void sll_insertLast(SingleLinkedList* list, SearchResult data);
-void sll_printList(SingleLinkedList* list);
-void sll_freeList(SingleLinkedList* list);
-
-void queue_init4(Queue4* queue);
-void queue_enqueue4(Queue4* queue, SearchResult data);
-SearchResult queue_dequeue4(Queue4* queue);
-int queue_isEmpty4(Queue4* queue);
-void queue_free4(Queue4* queue);
-
-void search_journals(DoubleLinkedList* sourceList, SingleLinkedList* resultList, const char* keyword);
+// Deklarasi fungsi untuk modul fitur4
+void sll_init(SingleLinkedList* list); // Inisialisasi single linked list
+SLLNode* sll_createNode(SearchResult data); // Membuat node baru untuk single linked list
+void sll_insertLast(SingleLinkedList* list, SearchResult data); // Menyisipkan data di akhir single linked list
+void sll_printList(SingleLinkedList* list); // Mencetak isi single linked list
+void sll_freeList(SingleLinkedList* list); // Membebaskan memori single linked list
+void search_journals(DoubleLinkedList* sourceList, SingleLinkedList* resultList, const char* keyword); // Mencari jurnal berdasarkan kata kunci pada judul
 
 #endif

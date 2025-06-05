@@ -1,3 +1,10 @@
+/*
+ * File        : fitur5.c
+ * Deskripsi   : Modul untuk menampilkan data jurnal dengan paginasi.
+ *               Menyediakan fungsi untuk mencetak header halaman, mencetak entri jurnal,
+ *               menampilkan halaman tertentu, dan navigasi halaman dengan input pengguna.
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include "fitur5.h"
@@ -5,24 +12,23 @@
 
 #define PAGE_SIZE 15
 
-// Fungsi untuk mencetak header halaman
+// Cetak header halaman dengan nomor halaman dan total entri
 void print_page_header(int page, int total) 
 {
     printf("Page %d\n", page + 1);
     printf("[Total: %d entri]\n\n\n", total);
 }
 
-// Fungsi untuk mencetak satu entri jurnal
+// Cetak satu entri jurnal berdasarkan node dan index
 void print_journal_entry(Node* node, int index) 
 {
     printf("%d. %s\n", index + 1, node->data.title);
     printf("    %d - %s - %s\n", node->data.year, node->data.authors, node->data.fieldOfStudy);
     printf("    %s\n", strlen(node->data.doiUrl) ? node->data.doiUrl : "-");
     printf("\n\n");    
-    //printf("------------------------------------------------------------------------------------------------------------------------------------\n");
 }
 
-// Fungsi untuk mencetak halaman tertentu
+// Cetak halaman jurnal berdasarkan nomor halaman
 void display_page(DoubleLinkedList* list, int page) 
 {
     int start = page * PAGE_SIZE;
@@ -56,7 +62,7 @@ void display_page(DoubleLinkedList* list, int page)
     }
 }
 
-// Fungsi utama untuk menampilkan jurnal dengan paginasi
+// Fungsi utama untuk menampilkan jurnal dengan navigasi halaman (next, prev, quit)
 void display_journals(DoubleLinkedList* list) 
 {
     if (!list || list->size == 0) 
