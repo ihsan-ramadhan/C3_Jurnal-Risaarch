@@ -48,24 +48,21 @@ void sll_insertLast(SingleLinkedList* list, SearchResult data) {
 }
 
 // Mencetak semua entri dalam single linked list hasil pencarian
+#define LABEL_WIDTH 10
+
 void sll_printList(SingleLinkedList* list) {
     if (list->head == NULL) {
         printf("Tidak ada jurnal yang sesuai.\n");
         return;
     }
 
-    const int label_width = 10;
-
-    printf("\nHasil pencarian:\n");
+    printf("\n=== Hasil Pencarian Jurnal ===\n");
     SLLNode* current = list->head;
     int row_number = 1;
     while (current != NULL) {
-        printf("%d. %-*s %s\n", 
-               row_number, 
-               label_width, "Title:", 
-               current->data.title);
-        printf("   %-*s %s\n", 
-               label_width, "DOI URL:", 
+        printf("%d.", row_number);
+        printf("%-*s %s\n", LABEL_WIDTH, "Title  :", current->data.title);
+        printf("  %-*s %s\n", LABEL_WIDTH, "DOI URL:", 
                strlen(current->data.doiUrl) ? current->data.doiUrl : "-");
         if (current->next != NULL) {
             printf("\n");
@@ -92,34 +89,21 @@ void sll_freeList(SingleLinkedList* list) {
 // Mencari substring secara case-insensitive dalam string
 static int stristr(const char* str, const char* substr) {
     if (!str || !substr) return 0;
-    
+
     int len_str = strlen(str);
     int len_substr = strlen(substr);
-    if (len_substr > len_str) return 0;
+    if (len_substr > len_str || len_substr == 0) return 0;
 
-    char* lower_str = (char*)malloc(len_str + 1);
-    char* lower_substr = (char*)malloc(len_substr + 1);
-    if (!lower_str || !lower_substr) {
-        free(lower_str);
-        free(lower_substr);
-        return 0;
+    for (int i = 0; i <= len_str - len_substr; i++) {
+        int j;
+        for (j = 0; j < len_substr; j++) {
+            if (tolower(str[i + j]) != tolower(substr[j])) {
+                break;
+            }
+        }
+        if (j == len_substr) return 1; // Substring ditemukan
     }
-
-    for (int i = 0; i < len_str; i++) {
-        lower_str[i] = tolower(str[i]);
-    }
-    lower_str[len_str] = '\0';
-
-    for (int i = 0; i < len_substr; i++) {
-        lower_substr[i] = tolower(substr[i]);
-    }
-    lower_substr[len_substr] = '\0';
-
-    int result = strstr(lower_str, lower_substr) != NULL;
-
-    free(lower_str);
-    free(lower_substr);
-    return result;
+    return 0;
 }
 
 // Mencari jurnal berdasarkan kata kunci dan menyimpan hasilnya dalam single linked list
