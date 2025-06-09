@@ -38,7 +38,7 @@ typedef struct {
 void sll3_init(SingleLinkedList3* list); // Inisialisasi single linked list
 SLLNode3* sll3_createNode(SearchResult3 data); // Membuat node baru untuk single linked list
 void sll3_insertLast(SingleLinkedList3* list, SearchResult3 data); // Menyisipkan data di akhir single linked list
-void sll3_printList(SingleLinkedList3* list); // Mencetak isi single linked list dalam format tabel
+void sll3_printList(SingleLinkedList3* list, const char *authorKeyword); // Mencetak isi single linked list dalam format tabel
 void sll3_freeList(SingleLinkedList3* list); // Membebaskan memori single linked list
 void search_journals_by_author(DoubleLinkedList* sourceList, SingleLinkedList3* resultList, const char* authorKeyword); // Mencari jurnal berdasarkan kata kunci penulis
 

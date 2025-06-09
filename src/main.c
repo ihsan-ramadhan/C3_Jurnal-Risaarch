@@ -95,7 +95,7 @@ int main()
             fgets(keyword, MAX_STR, stdin);
             keyword[strcspn(keyword, "\n")] = '\0';
             search_journals_by_author(&list, &searchResults3, keyword);
-            sll3_printList(&searchResults3);
+            sll3_printList(&searchResults3, keyword);
             sll3_freeList(&searchResults3);
             break;
         }

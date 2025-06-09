@@ -57,42 +57,24 @@ void sll3_insertLast(SingleLinkedList3 *list, SearchResult3 data) {
 }
 
 // Mencetak isi single linked list dalam format tabel
-void sll3_printList(SingleLinkedList3 *list) {
+void sll3_printList(SingleLinkedList3 *list, const char *authorKeyword) {
     if (!list->head) {
         printf("Author tidak ditemukan.\n");
         return;
     }
 
-    const int no_width = 4;
-    const int title_width = 40;
-    const int doi_width = 30;
-    const int authors_width = 40;
-    const int total_width = no_width + title_width + doi_width + authors_width + 6;
+    // Mencetak header dengan nama penulis yang dicari
+    printf("\nPaper dari Author: %s\n", authorKeyword);
 
-    printf("%-*s | %-*s | %-*s | %-*s\n",
-           no_width, "No",
-           title_width, "TITLE",
-           doi_width, "DOI URL",
-           authors_width, "AUTHORS");
-
-    for (int i = 0; i < total_width; i++) printf("-");
-    printf("\n");
-
-    SLLNode3 *current = list->head;
+     SLLNode3 *current = list->head;
     int index = 1;
     while (current) {
-        printf("%-*d | %-*.*s | %-*.*s | %-*.*s\n",
-               no_width, index,
-               title_width, title_width, current->data.title,
-               doi_width, doi_width, strlen(current->data.doiUrl) ? current->data.doiUrl : "-",
-               authors_width, authors_width, current->data.authors);
+        printf("%d. Title   : %s\n", index, current->data.title);
+        printf("   DOI URL : %s\n", strlen(current->data.doiUrl) > 0 ? current->data.doiUrl : "-");
+        printf("   Authors : %s\n\n", current->data.authors); 
 
         current = current->next;
         index++;
-        if (current) {
-            for (int i = 0; i < total_width; i++) printf("-");
-            printf("\n");
-        }
     }
 
     printf("\nTotal jurnal yang ditampilkan: %d\n", list->size);
