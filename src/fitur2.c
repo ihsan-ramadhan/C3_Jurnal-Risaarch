@@ -1,32 +1,26 @@
+/*
+ * File        : fitur2.c
+ * Deskripsi   : Modul untuk pencarian jurnal berdasarkan tahun dan rentang tahun.
+ *               Menyediakan fungsi untuk validasi input tahun, pencarian jurnal untuk tahun tunggal,
+ *               pencarian berdasarkan rentang tahun menggunakan BST, serta navigasi hasil dengan paginasi.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "fitur2.h"
 #include "dll.h"
 
-#define MAX_RESULTS 1000
-#define PAGE_SIZE 25
-
+// Variabel global untuk menyimpan hasil pencarian jurnal
 int hasil_count = 0;
-Node* hasil[MAX_RESULTS];
+Node* hasil[MAX_RESULTS2];
 
-void print_journal_table_header(int* titleWidth, int* yearWidth, int* doiWidth) {
-    *titleWidth = 40;
-    *yearWidth = strlen("TAHUN");
-    *doiWidth = strlen("DOI URL");
-
-    // Print header
-    printf("%-*s | %-*s | %-*s\n", *titleWidth, "TITLE", *yearWidth, "TAHUN", *doiWidth, "DOI URL");
-
-    // Print separator
-    for (int i = 0; i < *titleWidth; i++) printf("-");
-    printf("-+-");
-    for (int i = 0; i < *yearWidth; i++) printf("-");
-    printf("-+-");
-    for (int i = 0; i < *doiWidth; i++) printf("-");
-    printf("\n");
+// Mengecek apakah startYear lebih kecil/sama dari endYear
+int is_valid_year_range(int startYear, int endYear) {
+    return startYear <= endYear;
 }
 
+// Menampilkan 1 baris jurnal dalam format tabel
 void print_journal_row(const char* title, int year, const char* doiUrl, int titleWidth, int yearWidth, int doiWidth) {
     char shortTitle[titleWidth + 1];
     strncpy(shortTitle, title, titleWidth);
@@ -38,84 +32,8 @@ void print_journal_row(const char* title, int year, const char* doiUrl, int titl
         doiWidth, strlen(doiUrl) ? doiUrl : "-");
 }
 
-void search_and_print(DoubleLinkedList* list, int year) {
-    Node* current = list->head;
-    int titleWidth, yearWidth, doiWidth;
-    int printed = 0;
-
-    while (current) {
-        if (current->data.year == year) {
-            if (!printed) {
-                print_journal_table_header(&titleWidth, &yearWidth, &doiWidth);
-                printed = 1;
-            }
-
-            // update max doiWidth if necessary
-            int len = strlen(current->data.doiUrl);
-            if (len > doiWidth) doiWidth = len;
-        }
-        current = current->next;
-    }
-
-    if (!printed) return; // tidak ada data tahun ini
-
-    current = list->head;
-    while (current) {
-        if (current->data.year == year) {
-            print_journal_row(current->data.title, current->data.year, current->data.doiUrl, titleWidth, yearWidth, doiWidth);
-        }
-        current = current->next;
-    }
-
-    printf("\n");
-}
-
-BSTNode* insert_bst(BSTNode* root, int year) {
-    if (!root) {
-        BSTNode* newNode = (BSTNode*)malloc(sizeof(BSTNode));
-        newNode->year = year;
-        newNode->left = newNode->right = NULL;
-        return newNode;
-    }
-    if (year < root->year)
-        root->left = insert_bst(root->left, year);
-    else if (year > root->year)
-        root->right = insert_bst(root->right, year);
-    return root;
-}
-
-void inorder_traversal(BSTNode* root, DoubleLinkedList* list) {
-    if (!root) return;
-    inorder_traversal(root->left, list);
-    search_and_print(list, root->year);
-    inorder_traversal(root->right, list);
-}
-
-void free_bst(BSTNode* root) {
-    if (!root) return;
-    free_bst(root->left);
-    free_bst(root->right);
-    free(root);
-}
-
-void kumpulkan_jurnal(BSTNode* root, DoubleLinkedList* list) {
-    if (!root) return;
-    kumpulkan_jurnal(root->left, list);  
-
-    Node* current = list->head;
-    while (current) {
-        if (current->data.year == root->year) {
-            if (hasil_count < MAX_RESULTS) {
-                hasil[hasil_count++] = current;
-            }
-        }
-        current = current->next;
-    }
-
-    kumpulkan_jurnal(root->right, list);
-}
-
-void tampilkan_halaman(int page) {
+// Menampilkan data hasil pencarian dalam bentuk halaman
+void print_table_page(int page) {
     int start = page * PAGE_SIZE;
     int end = start + PAGE_SIZE;
     if (start >= hasil_count) {
@@ -138,7 +56,6 @@ void tampilkan_halaman(int page) {
     for (int i = 0; i < doiWidth; i++) printf("-");
     printf("\n");
 
-
     for (int i = start; i < end; ++i) {
         printf("%-4d | ", i + 1);
         print_journal_row(hasil[i]->data.title, hasil[i]->data.year, hasil[i]->data.doiUrl, titleWidth, yearWidth, doiWidth);
@@ -147,14 +64,51 @@ void tampilkan_halaman(int page) {
     printf("\n[Total: %d entri] Gunakan 'n' untuk next, 'p' untuk prev, 'q' untuk quit.\n", hasil_count);
 }
 
-void filter_by_year_range(DoubleLinkedList* list, int startYear, int endYear) {
-    if (!list || startYear > endYear) return;
+// Fungsi navigasi halaman (paging) untuk hasil pencarian
+void navigasi_halaman(const char* info) {
+    int page = 0;
+    char command;
 
-    hasil_count = 0;
+    do {
+        if (info) printf("\n%s - Halaman %d:\n", info, page + 1);
+        print_table_page(page);
+        printf("Perintah: ");
+        scanf(" %c", &command);
 
+        if (command == 'n' && (page + 1) * PAGE_SIZE < hasil_count) {
+            page++;
+        } else if (command == 'p' && page > 0) {
+            page--;
+        }
+    } while (command != 'q');
+}
+
+// Insert dan hapus node BST berdasarkan tahun jurnal
+BSTNode* insert_bst(BSTNode* root, int year) {
+    if (!root) {
+        BSTNode* newNode = (BSTNode*)malloc(sizeof(BSTNode));
+        newNode->year = year;
+        newNode->left = newNode->right = NULL;
+        return newNode;
+    }
+    if (year < root->year)
+        root->left = insert_bst(root->left, year);
+    else if (year > root->year)
+        root->right = insert_bst(root->right, year);
+    return root;
+}
+
+void free_bst(BSTNode* root) {
+    if (!root) return;
+    free_bst(root->left);
+    free_bst(root->right);
+    free(root);
+}
+
+// Menelusuri seluruh DoubleLinkedList dan memasukkan tahun jurnal ke BST
+BSTNode* create_bst_from_years(DoubleLinkedList* list, int startYear, int endYear) {
     BSTNode* root = NULL;
     Node* current = list->head;
-
     while (current) {
         int year = current->data.year;
         if (year >= startYear && year <= endYear) {
@@ -162,27 +116,73 @@ void filter_by_year_range(DoubleLinkedList* list, int startYear, int endYear) {
         }
         current = current->next;
     }
+    return root;
+}
 
-    kumpulkan_jurnal(root, list);
+// Pencarian jurnal jika 1 tahun
+void search_by_year(DoubleLinkedList* list, int year) {
+    if (!list || list->head == NULL) return;
+
+    hasil_count = 0;
+    Node* current = list->head;
+    while (current && hasil_count < MAX_RESULTS2) {
+        if (current->data.year == year) {
+            hasil[hasil_count++] = current;
+        }
+        current = current->next;
+    }
 
     if (hasil_count == 0) {
-        printf("Tidak ada data pada rentang tahun tersebut.\n");
-        free_bst(root);
+        printf("Tidak ditemukan jurnal untuk tahun %d\n", year);
         return;
     }
 
-    int page = 0;
-    char command;
-    do {
-        tampilkan_halaman(page);
-        printf("Perintah: ");
-        scanf(" %c", &command);
-        if (command == 'n' && (page + 1) * PAGE_SIZE < hasil_count) {
-            page++;
-        } else if (command == 'p' && page > 0) {
-            page--;
+    char info[100];
+    sprintf(info, "Hasil pencarian untuk tahun %d", year);
+    navigasi_halaman(info);
+}
+
+// Melakukan inorder traversal pada BST
+void kumpulkan_jurnal(BSTNode* root, DoubleLinkedList* list) {
+    if (!root) return;
+
+    kumpulkan_jurnal(root->left, list);
+    Node* current = list->head;
+    while (current) {
+        if (current->data.year == root->year && hasil_count < MAX_RESULTS2) {
+            hasil[hasil_count++] = current;
         }
-    } while (command != 'q');
+        current = current->next;
+    }
+    kumpulkan_jurnal(root->right, list);
+}
+
+// Jika rentang
+void filter_by_year_range(DoubleLinkedList* list, int startYear, int endYear) {
+    if (!list) return;
+    if (!is_valid_year_range(startYear, endYear)) {
+        printf("Rentang tahun tidak valid!\n");
+        return;
+    }
+
+    if (startYear == endYear) {
+        search_by_year(list, startYear);
+        return;
+    }
+
+    hasil_count = 0;
+    BSTNode* root = create_bst_from_years(list, startYear, endYear);
+    kumpulkan_jurnal(root, list);
+
+    if (hasil_count == 0) {
+    printf("Tidak ada data pada rentang tahun tersebut.\n");
+    free_bst(root);
+    return;
+    }
+
+    char info[100];
+    sprintf(info, "Hasil pencarian untuk rentang tahun %d - %d", startYear, endYear);
+    navigasi_halaman(info);
 
     free_bst(root);
 }
