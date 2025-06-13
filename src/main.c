@@ -105,7 +105,7 @@ int main()
             printf("\nMasukkan kata kunci yang ingin dicari di Title: ");
             fgets(keyword, MAX_STR, stdin);
             keyword[strcspn(keyword, "\n")] = '\0';
-            search_journals(&list, &searchResults, keyword);
+            search_journals_by_keyword(&list, &searchResults, keyword);
             sll_printList(&searchResults);
             sll_freeList(&searchResults);
             break;
