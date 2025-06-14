@@ -39,6 +39,6 @@ SLLNode* sll_createNode(SearchResult data); // Membuat node baru untuk single li
 void sll_insertLast(SingleLinkedList* list, SearchResult data); // Menyisipkan data di akhir single linked list
 void sll_printList(SingleLinkedList* list); // Mencetak isi single linked list
 void sll_freeList(SingleLinkedList* list); // Membebaskan memori single linked list
-void search_journals(DoubleLinkedList* sourceList, SingleLinkedList* resultList, const char* keyword); // Mencari jurnal berdasarkan kata kunci pada judul
+void search_journals_by_keyword(DoubleLinkedList* sourceList, SingleLinkedList* resultList, const char* keyword); // Mencari jurnal berdasarkan kata kunci pada judul
 
 #endif

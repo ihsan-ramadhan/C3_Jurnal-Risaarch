@@ -107,7 +107,7 @@ static int stristr(const char* str, const char* substr) {
 }
 
 // Mencari jurnal berdasarkan kata kunci dan menyimpan hasilnya dalam single linked list
-void search_journals(DoubleLinkedList* sourceList, SingleLinkedList* resultList, const char* keyword) {
+void search_journals_by_keyword(DoubleLinkedList* sourceList, SingleLinkedList* resultList, const char* keyword) {
     if (!sourceList || !resultList || !keyword) return;
 
     sll_init(resultList);
