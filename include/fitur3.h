@@ -16,31 +16,34 @@
 #define MAX_RESULTS 10
 
 // Struktur data untuk menyimpan hasil pencarian jurnal
-typedef struct {
+typedef struct
+{
     char title[MAX_STR];
     char doiUrl[MAX_STR];
     char authors[MAX_STR];
-} SearchResult3;
+} PapersData;
 
 // Struktur node untuk single linked list hasil pencarian
-typedef struct SLLNode3 {
-    SearchResult3 data;
-    struct SLLNode3* next;
-} SLLNode3;
+typedef struct AuthorNode
+{
+    PapersData data;
+    struct AuthorNode *next;
+} AuthorNode;
 
 // Struktur single linked list untuk hasil pencarian
-typedef struct {
-    SLLNode3* head;
+typedef struct
+{
+    AuthorNode *head;
     int size;
-} SingleLinkedList3;
+} AuthorSLL;
 
 // Deklarasi fungsi untuk modul fitur3
-void sll3_init(SingleLinkedList3* list); // Inisialisasi single linked list
-SLLNode3* sll3_createNode(SearchResult3 data); // Membuat node baru untuk single linked list
-void sll3_insertLast(SingleLinkedList3* list, SearchResult3 data); // Menyisipkan data di akhir single linked list
-void user_input(char *output, int max_len, SingleLinkedList3 *searchResults, DoubleLinkedList *data); // input pengguna dan error checking nya
-void sll3_printList(SingleLinkedList3* list, const char *authorKeyword); // Mencetak isi single linked list dalam format tabel
-void sll3_freeList(SingleLinkedList3* list); // Membebaskan memori single linked list
-void search_journals_by_author(DoubleLinkedList* sourceList, SingleLinkedList3* resultList, const char* authorKeyword); // Mencari jurnal berdasarkan kata kunci penulis
+void list_init(AuthorSLL *list);                                                                       // Inisialisasi single linked list
+AuthorNode *create_node(PapersData data);                                                               // Membuat node baru untuk single linked list
+void insert_last(AuthorSLL *list, PapersData data);                                                    // Menyisipkan data di akhir single linked list
+void user_input(char *output, int max_len, AuthorSLL *searchResults, DoubleLinkedList *data);          // input pengguna dan error checking nya
+void print_list(AuthorSLL *list, const char *authorKeyword);                                           // Mencetak isi single linked list dalam format tabel
+void free_list(AuthorSLL *list);                                                                       // Membebaskan memori single linked list
+void search_by_author(DoubleLinkedList *sourceList, AuthorSLL *resultList, const char *authorKeyword); // Mencari jurnal berdasarkan kata kunci penulis
 
 #endif // FITUR3_H

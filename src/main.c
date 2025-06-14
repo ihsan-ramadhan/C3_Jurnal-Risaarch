@@ -1,6 +1,6 @@
 /*
  * File        : main.c
- * Deskripsi   : Program utama untuk aplikasi "Jurnal Risaarch" - Sistem pencarian dan pengelolaan jurnal berbasis CSV
+ * Deskripsi   : Program utama untuk aplikasi "jurnal Risaarch" - Sistem pencarian dan pengelolaan jurnal berbasis CSV
  *               menggunakan struktur data modular (Double Linked List, Single Linked List).
  *               Program ini mendukung pencarian jurnal berdasarkan Field of Study, Tahun, Author, dan Kata Kunci.
  */
@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "dll.h"       // Modul struktur Double Linked List untuk data jurnal utama
-#include "jurnal.h"    // Modul parsing file CSV dan definisi struktur Jurnal
+#include "jurnal.h"    // Modul parsing file CSV dan definisi struktur jurnal
 #include "fitur2.h"    // Fitur pencarian jurnal berdasarkan rentang tahun
 #include "fitur3.h"    // Fitur pencarian jurnal berdasarkan Author
 #include "fitur4.h"    // Fitur pencarian jurnal berdasarkan Kata Kunci di judul
@@ -89,12 +89,12 @@ int main()
         case 3:
         {
             // Fitur 3: Pencarian berdasarkan Author
-            SingleLinkedList3 searchResults3;
-            sll3_init(&searchResults3);
-            user_input(keyword, 50, &searchResults3, &list);
+            AuthorSLL papersData;
+            list_init(&papersData);
+            user_input(keyword, 50, &papersData, &list);
             keyword[strcspn(keyword, "\n")] = '\0';
-            sll3_printList(&searchResults3, keyword);
-            sll3_freeList(&searchResults3);
+            print_list(&papersData, keyword);
+            free_list(&papersData);
             break;
         }
 
