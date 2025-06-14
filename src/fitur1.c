@@ -153,7 +153,37 @@ void fitur1_searchField(DoubleLinkedList *dll, const char *field)
             return;
         }
 
-        // ... lanjutan tampilan dan navigasi page
+        // Tampilkan hasil pencarian dari Queue ke SLL
+        SLLNode_f1 *resultList = NULL;
+        sll_buildFromQueue(&q, &resultList);
+        sll_show(resultList);
+        sll_clear(&resultList);
+
+        // Navigasi halaman
+        char pilihan;
+        printf("\n[Ketik 'n' untuk halaman berikutnya, 'q' untuk keluar]: ");
+        scanf(" %c", &pilihan);
+
+        queue_free(&q); // Penting! Bersihkan queue
+
+        if (pilihan == 'q' || pilihan == 'Q')
+        {
+            break;
+        }
+        else if (pilihan == 'n' || pilihan == 'N')
+        {
+            if (curr == NULL)
+            {
+                printf("Tidak ada halaman berikutnya.\n");
+                break;
+            }
+            page = curr; // Lanjutkan dari data terakhir
+        }
+        else
+        {
+            printf("Pilihan tidak valid. Keluar.\n");
+            break;
+        }
     }
 }
 
