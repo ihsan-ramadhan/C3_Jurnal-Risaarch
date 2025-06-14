@@ -32,5 +32,6 @@ void sll_show(SLLNode_f1 *head); // Menampilkan isi single linked list
 void sll_clear(SLLNode_f1 **head); // Membebaskan memori single linked list
 void fitur1_searchField(DoubleLinkedList *dll, const char *field); // Mencari jurnal berdasarkan Field of Study
 void tampilkanFieldStatic2Kolom(); // Menampilkan daftar Field of Study dalam format tabel dua kolom
+int cekinputfield (const char *input);
 
 #endif
