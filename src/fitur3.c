@@ -25,12 +25,12 @@ SLLNode3 *sll3_createNode(SearchResult3 data) {
         printf("Gagal alokasi memori untuk SLLNode3!\n");
         return NULL;
     }
-    strncpy(newNode->data.title, data.title, MAX_STR - 1);
-    newNode->data.title[MAX_STR - 1] = '\0';
-    strncpy(newNode->data.doiUrl, data.doiUrl, MAX_STR - 1);
-    newNode->data.doiUrl[MAX_STR - 1] = '\0';
-    strncpy(newNode->data.authors, data.authors, MAX_STR - 1);
-    newNode->data.authors[MAX_STR - 1] = '\0';
+    strncpy(newNode->data.title, data.title, MAX_STRING - 1);
+    newNode->data.title[MAX_STRING - 1] = '\0';
+    strncpy(newNode->data.doiUrl, data.doiUrl, MAX_STRING - 1);
+    newNode->data.doiUrl[MAX_STRING - 1] = '\0';
+    strncpy(newNode->data.authors, data.authors, MAX_STRING - 1);
+    newNode->data.authors[MAX_STRING - 30] = '\0';
     newNode->next = NULL;
     return newNode;
 }
@@ -56,12 +56,44 @@ void sll3_insertLast(SingleLinkedList3 *list, SearchResult3 data) {
     list->size++;
 }
 
+void user_input(char *output, int max_len, SingleLinkedList3 *searchResults, DoubleLinkedList *data) {
+    while (1) {
+        printf("Masukkan nama Author yang ingin dicari secara spesifik (Contoh: Isaac Newton): ");
+        fgets(output, max_len, stdin);
+        output[strcspn(output, "\n")] = '\0';
+
+        if (strlen(output) == 0) {
+            printf("Input tidak boleh kosong.\n\n");
+            continue;
+        }
+
+        int valid = 1;
+        for (int i = 0; output[i]; i++) {
+            if (!isalpha(output[i]) && !isspace(output[i])) {
+                valid = 0;
+                break;
+            }
+        }
+
+        if (!valid) {
+            printf("Input tidak valid. Jangan masukkan angka atau simbol, hanya huruf dan spasi saja.\n\n");
+            continue;
+        }
+
+        search_journals_by_author(data, searchResults, output);
+
+        if (searchResults->size == 0) {
+            printf("Author \"%s\" tidak ditemukan.\n\n", output);
+            continue;
+        }
+
+        break;
+    }
+}
+
+
 // Mencetak isi single linked list dalam format tabel
 void sll3_printList(SingleLinkedList3 *list, const char *authorKeyword) {
-    if (!list->head) {
-        printf("Author tidak ditemukan.\n");
-        return;
-    }
 
     // Mencetak header dengan nama penulis yang dicari
     printf("\nPaper dari Author: %s\n", authorKeyword);
@@ -135,12 +167,12 @@ void search_journals_by_author(DoubleLinkedList *sourceList, SingleLinkedList3 *
     while (current != NULL && resultList->size < MAX_RESULTS) {
         if (stristr_custom(current->data.authors, authorKeyword)) {
             SearchResult3 result;
-            strncpy(result.title, current->data.title, MAX_STR - 1);
-            result.title[MAX_STR - 1] = '\0';
-            strncpy(result.doiUrl, current->data.doiUrl, MAX_STR - 1);
-            result.doiUrl[MAX_STR - 1] = '\0';
-            strncpy(result.authors, current->data.authors, MAX_STR - 1);
-            result.authors[MAX_STR - 1] = '\0';
+            strncpy(result.title, current->data.title, MAX_STRING - 1);
+            result.title[MAX_STRING - 1] = '\0';
+            strncpy(result.doiUrl, current->data.doiUrl, MAX_STRING - 1);
+            result.doiUrl[MAX_STRING - 1] = '\0';
+            strncpy(result.authors, current->data.authors, MAX_STRING - 1);
+            result.authors[MAX_STRING - 1] = '\0';
             sll3_insertLast(resultList, result);
         }
         current = current->next;

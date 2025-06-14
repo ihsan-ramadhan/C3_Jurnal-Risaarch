@@ -89,12 +89,10 @@ int main()
         case 3:
         {
             // Fitur 3: Pencarian berdasarkan Author
-            SingleLinkedList3 searchResults3; // Struktur hasil pencarian fitur 3
+            SingleLinkedList3 searchResults3;
             sll3_init(&searchResults3);
-            printf("\nMasukkan nama author yang ingin dicari secara spesifik: ");
-            fgets(keyword, MAX_STR, stdin);
+            user_input(keyword, 50, &searchResults3, &list);
             keyword[strcspn(keyword, "\n")] = '\0';
-            search_journals_by_author(&list, &searchResults3, keyword);
             sll3_printList(&searchResults3, keyword);
             sll3_freeList(&searchResults3);
             break;
