@@ -73,12 +73,27 @@ void display_journals(DoubleLinkedList* list)
 
     int page = 0;
     char command;
+    char input[10];
     do 
     {
         display_page(list, page);
-        printf("\nGunakan 'n' untuk next, 'p' untuk prev, 'q' untuk quit.\n");
-        printf("Perintah: ");
-        scanf(" %c", &command);
+        printf("\nGunakan 'n' untuk next page, 'p' untuk prev page, 'q' untuk quit.\n");
+        while (1)
+        {
+            printf("Perintah: ");
+            if (fgets(input, sizeof(input), stdin) != NULL)
+            {
+                if (sscanf(input, " %c", &command) == 1) 
+                {
+                    if (command == 'n' || command == 'p' || command == 'q') 
+                    {
+                        break;
+                    } 
+                }
+            }
+            printf("Perintah tidak valid. Masukan 'n', 'p', atau 'q'.\n\n");
+            
+        }
 
         if (command == 'n' && (page + 1) * PAGE_SIZE < list->size) 
         {
