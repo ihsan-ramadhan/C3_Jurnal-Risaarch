@@ -119,8 +119,7 @@ void fitur1_searchField(DoubleLinkedList *dll, const char *field)
     // Cek apakah field termasuk dalam daftar field yang valid
     if (!cekinputfield(field))
     {
-        printf("Field of Study '%s' tidak valid. Gunakan salah satu dari daftar berikut:\n", field);
-        tampilkanFieldStatic2Kolom(); // Tampilkan ulang daftar field
+        printf("Field of Study '%s' tidak valid. Gunakan salah satu dari daftar diatas\n", field);
         return;
     }
 
