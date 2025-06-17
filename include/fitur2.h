@@ -27,5 +27,6 @@ void print_table_page(int page);
 void search_by_year(DoubleLinkedList* list, int year);
 void filter_by_year_range(DoubleLinkedList* list, int startYear, int endYear);
 int is_valid_year_range(int startYear, int endYear);
+int get_valid_year_input(const char* prompt);
 
 #endif

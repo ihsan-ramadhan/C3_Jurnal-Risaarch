@@ -10,6 +10,7 @@
 #include <string.h>
 #include "fitur2.h"
 #include "dll.h"
+#include <ctype.h>
 
 // Variabel global untuk menyimpan hasil pencarian jurnal
 int hasil_count = 0;
@@ -185,4 +186,38 @@ void filter_by_year_range(DoubleLinkedList* list, int startYear, int endYear) {
     navigasi_halaman(info);
 
     free_bst(root);
+}
+
+// Fungsi untuk membaca tahun dari input dengan validasi
+int get_valid_year_input(const char* prompt) {
+    char buffer[100];
+    int tahun = 0;
+
+    while (1) {
+        printf("%s", prompt);
+        fgets(buffer, sizeof(buffer), stdin);
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        // Cek apakah semua karakter adalah digit
+        int valid = 1;
+        for (int i = 0; buffer[i]; ++i) {
+            if (!isdigit(buffer[i])) {
+                valid = 0;
+                break;
+            }
+        }
+
+        if (!valid) {
+            printf("Input tidak valid! Masukkan angka tahun yang benar.\n\n");
+            continue;
+        }
+
+        tahun = atoi(buffer);
+        if (tahun < 1980) {
+            printf("Tahun harus 1980 atau lebih besar!\n\n");
+            continue;
+        }
+
+        return tahun;
+    }
 }
