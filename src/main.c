@@ -68,20 +68,14 @@ int main()
         case 2:
         {
             // Fitur 2: Pencarian berdasarkan Rentang Tahun
-            int tahunAwal, tahunAkhir;
-            printf("\nMasukkan tahun awal: ");
-            if (scanf("%d", &tahunAwal) != 1) {
-                printf("Input tahun invalid! Silahkan masukkan angka.\n");
-                while (getchar() != '\n');
+            int tahunAwal = get_valid_year_input("\nMasukkan tahun awal: ");
+            int tahunAkhir = get_valid_year_input("Masukkan tahun akhir: ");
+
+            if (tahunAwal > tahunAkhir) {
+                printf("Rentang tahun tidak valid! Tahun awal tidak boleh lebih besar dari tahun akhir.\n");
                 break;
             }
-            printf("Masukkan tahun akhir: ");
-            if (scanf("%d", &tahunAkhir) != 1) {
-                printf("Input tahun invalid! Silahkan masukkan angka.\n");
-                while (getchar() != '\n');
-                break;
-            }
-            getchar(); // Tangkap newline
+
             filter_by_year_range(&list, tahunAwal, tahunAkhir);
             break;
         }
