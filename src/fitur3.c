@@ -1,9 +1,9 @@
 /*
  * File        : fitur3.c
- * Deskripsi   : Modul untuk pencarian paper berdasarkan nama penulis dan pengelolaan daftar hasil pencarian.
+ * Deskripsi   : Modul untuk pencarian Jurnal berdasarkan nama penulis dan pengelolaan daftar hasil pencarian.
  *               Menyediakan fungsi untuk inisialisasi linked list, pembuatan node, penyisipan data,
  *               pencetakan hasil pencarian dalam format tabel, pembersihan linked list, dan pencarian
- *               paper berdasarkan kata kunci penulis dengan batasan jumlah hasil maksimum.
+ *               Jurnal berdasarkan kata kunci penulis dengan batasan jumlah hasil maksimum.
  */
 
 #include <stdio.h>
@@ -19,7 +19,7 @@ void list_init(AuthorSLL *list) {
 }
 
 // Membuat node baru untuk single linked list dengan data hasil pencarian
-AuthorNode *create_node(PapersData data) {
+AuthorNode *create_node(JournalsData data) {
     AuthorNode *newNode = (AuthorNode *)malloc(sizeof(AuthorNode));
     if (newNode == NULL) {
         printf("Gagal alokasi memori untuk AuthorNode!\n");
@@ -36,7 +36,7 @@ AuthorNode *create_node(PapersData data) {
 }
 
 // Menyisipkan data hasil pencarian di akhir single linked list dengan batasan jumlah maksimum
-void insert_last(AuthorSLL *list, PapersData data) {
+void insert_last(AuthorSLL *list, JournalsData data) {
     if (list->size >= MAX_RESULTS) {
         return;
     }
@@ -96,7 +96,7 @@ void user_input(char *output, int max_len, AuthorSLL *searchResults, DoubleLinke
 void print_list(AuthorSLL *list, const char *authorKeyword) {
 
     // Mencetak header dengan nama penulis yang dicari
-    printf("\nPaper dari Author: %s\n", authorKeyword);
+    printf("\nJurnal dari Author: %s\n", authorKeyword);
 
      AuthorNode *current = list->head;
     int index = 1;
@@ -109,7 +109,7 @@ void print_list(AuthorSLL *list, const char *authorKeyword) {
         index++;
     }
 
-    printf("\nTotal paper yang ditampilkan: %d\n", list->size);
+    printf("\nTotal Jurnal yang ditampilkan: %d\n", list->size);
 }
 
 // Membebaskan memori yang digunakan oleh single linked list
@@ -157,7 +157,7 @@ static int stristr_custom(const char *str, const char *substr) {
     return result;
 }
 
-// Mencari paper berdasarkan kata kunci penulis dan menyimpan hasilnya dalam single linked list
+// Mencari Jurnal berdasarkan kata kunci penulis dan menyimpan hasilnya dalam single linked list
 void search_by_author(DoubleLinkedList *sourceList, AuthorSLL *resultList, const char *authorKeyword) {
     if (!sourceList || !resultList || !authorKeyword) return;
 
@@ -166,7 +166,7 @@ void search_by_author(DoubleLinkedList *sourceList, AuthorSLL *resultList, const
     Node *current = sourceList->head;
     while (current != NULL && resultList->size < MAX_RESULTS) {
         if (stristr_custom(current->data.authors, authorKeyword)) {
-            PapersData result;
+            JournalsData result;
             strncpy(result.title, current->data.title, MAX_STRING - 1);
             result.title[MAX_STRING - 1] = '\0';
             strncpy(result.doiUrl, current->data.doiUrl, MAX_STRING - 1);

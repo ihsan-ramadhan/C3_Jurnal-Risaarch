@@ -21,12 +21,12 @@ typedef struct
     char title[MAX_STR];
     char doiUrl[MAX_STR];
     char authors[MAX_STR];
-} PapersData;
+} JournalsData;
 
 // Struktur node untuk single linked list hasil pencarian
 typedef struct AuthorNode
 {
-    PapersData data;
+    JournalsData data;
     struct AuthorNode *next;
 } AuthorNode;
 
@@ -39,8 +39,8 @@ typedef struct
 
 // Deklarasi fungsi untuk modul fitur3
 void list_init(AuthorSLL *list);                                                                       // Inisialisasi single linked list
-AuthorNode *create_node(PapersData data);                                                               // Membuat node baru untuk single linked list
-void insert_last(AuthorSLL *list, PapersData data);                                                    // Menyisipkan data di akhir single linked list
+AuthorNode *create_node(JournalsData data);                                                               // Membuat node baru untuk single linked list
+void insert_last(AuthorSLL *list, JournalsData data);                                                    // Menyisipkan data di akhir single linked list
 void user_input(char *output, int max_len, AuthorSLL *searchResults, DoubleLinkedList *data);          // input pengguna dan error checking nya
 void print_list(AuthorSLL *list, const char *authorKeyword);                                           // Mencetak isi single linked list dalam format tabel
 void free_list(AuthorSLL *list);                                                                       // Membebaskan memori single linked list

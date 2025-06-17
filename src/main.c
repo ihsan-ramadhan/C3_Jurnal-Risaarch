@@ -89,12 +89,12 @@ int main()
         case 3:
         {
             // Fitur 3: Pencarian berdasarkan Author
-            AuthorSLL papersData;
-            list_init(&papersData);
-            user_input(keyword, 50, &papersData, &list);
+            AuthorSLL JournalsData;
+            list_init(&JournalsData);
+            user_input(keyword, 50, &JournalsData, &list);
             keyword[strcspn(keyword, "\n")] = '\0';
-            print_list(&papersData, keyword);
-            free_list(&papersData);
+            print_list(&JournalsData, keyword);
+            free_list(&JournalsData);
             break;
         }
 
