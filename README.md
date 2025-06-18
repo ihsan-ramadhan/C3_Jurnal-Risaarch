@@ -19,7 +19,7 @@
 3. *Queue*: Menyimpan sementara hasil pencarian untuk dikonversi ke list (fitur 1 dan 4).
 4. *Binary Search Tree (BST)*: Digunakan dalam pencarian jurnal berdasarkan rentang tahun.
 
-## 🔍 Fitur-Fitur Aplikasi Jurnal Risaarch
+# Fitur-Fitur Aplikasi Jurnal Risaarch
 1. *Pencarian Jurnal Berdasarkan Field of Study*
 
    * Menampilkan daftar Field of Study (bidang ilmu) yang tersedia.
