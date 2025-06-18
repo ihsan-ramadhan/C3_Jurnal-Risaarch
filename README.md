@@ -13,6 +13,12 @@
 # Deskripsi Program
 *Jurnal Risaarch* adalah aplikasi berbasis terminal yang dikembangkan untuk memudahkan pengguna dalam melakukan pencarian dan pengelolaan data jurnal ilmiah. Aplikasi ini membaca data dari file CSV dan menyimpannya ke dalam struktur data Double Linked List untuk memungkinkan operasi pencarian dan penampilan data secara efisien.
 
+# Struktur Data Program
+1. *Double Linked List (DLL)*: Menyimpan seluruh data jurnal dari CSV.
+2. *Single Linked List (SLL)*: Menyimpan hasil pencarian untuk ditampilkan (fitur 1, 3, dan 4).
+3. *Queue*: Menyimpan sementara hasil pencarian untuk dikonversi ke list (fitur 1 dan 4).
+4. *Binary Search Tree (BST)*: Digunakan dalam pencarian jurnal berdasarkan rentang tahun.
+
 ## 🔍 Fitur-Fitur Aplikasi Jurnal Risaarch
 1. *Pencarian Jurnal Berdasarkan Field of Study*
 
