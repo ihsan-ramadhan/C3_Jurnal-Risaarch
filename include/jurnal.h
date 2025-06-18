@@ -1,11 +1,4 @@
-#ifndef JURNAL_H
-#define JURNAL_H
-
-#include "dll.h"
-
-void parse_csv(const char* filename, DoubleLinkedList* list);
-
-#endif/*
+/*
  * File        : jurnal.h
  * Deskripsi   : Header file untuk modul pengelolaan data jurnal dari file CSV.
  *               Mendefinisikan deklarasi fungsi untuk mem-parsing data jurnal dari file CSV
